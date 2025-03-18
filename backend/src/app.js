@@ -42,4 +42,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// FE related
+// 1. Serve static files from "public" directory
+app.use(express.static(path.join(__dirname, "..", "public")));
+
+// 2. (Optional) Fallback route for SPA
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+});
+
 module.exports = app;
