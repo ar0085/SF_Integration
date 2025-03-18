@@ -18,7 +18,6 @@ exports.getAccounts = async (req, res) => {
       .json({ message: "Unauthorized: Please log in to Salesforce." });
   }
   try {
-    // Using session-based storage for tokens in this example:
     const conn = new jsforce.Connection({
       accessToken: tokenStore.sfAccessToken,
       instanceUrl: tokenStore.sfInstanceUrl,

@@ -14,15 +14,6 @@ app.use(bodyParser.json());
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-// Session for Salesforce tokens (simple example)
-// app.use(
-//   session({
-//     secret: "some_random_secret",
-//     resave: false,
-//     saveUninitialized: false,
-//   })
-// );
-
 app.use(
   cors({
     origin: "http://localhost:4002", // or wherever frontend runs
