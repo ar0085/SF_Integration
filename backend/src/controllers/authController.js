@@ -105,7 +105,7 @@ exports.salesforceCallback = async (req, res) => {
 
     // Redirect to your frontend's dashboard
     return res.redirect(
-      `http://localhost:4002/dashboard?accessToken=${conn.accessToken}&instanceUrl=${conn.instanceUrl}`
+      `${process.env.FRONTEND_URL}/dashboard?accessToken=${conn.accessToken}&instanceUrl=${conn.instanceUrl}`
     );
   } catch (error) {
     console.error("❌ Salesforce OAuth Error:", error);
