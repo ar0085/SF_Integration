@@ -12,6 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const cookieParser = require("cookie-parser");
+const path = require("path");
 app.use(cookieParser());
 
 app.use(
