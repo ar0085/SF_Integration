@@ -201,6 +201,6 @@ In short, for <strong>Netlify + Vue + createWebHistory</strong>:
 
 <hr />
 
-<p><em>Thanks for reading!</em> I hope this README helps you understand the <strong>why</strong> and <strong>how</strong> of the Salesforce Integration project—feel free to clone, fork, or build upon it. If you run into issues, double-check environment variables, rewrite rules, and that pesky Salesforce callback URL. Happy coding!</p>
+<p><em>Thanks for reading!</em> I hope this README helps you understand the <strong>why</strong> and <strong>how</strong> of the Salesforce Integration project—feel free to clone, fork, or build upon it. If you run into issues, double-check environment variables, rewrite rules, and Salesforce callback URL. Happy coding!</p>
 
 </body>
