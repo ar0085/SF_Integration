@@ -101,8 +101,8 @@ exports.salesforceCallback = async (req, res) => {
     const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // HTTPS in production
-      sameSite: "Lax",
-      maxAge: 1000 * 60 * 60 * 2, // 2 hours
+      sameSite: "None",      // 🔥 Required for cross-origin cookies
+      maxAge: 1000 * 60 * 60 * 2 // 2 hours
     };
 
     res.cookie("sfAccessToken", conn.accessToken, cookieOptions);
