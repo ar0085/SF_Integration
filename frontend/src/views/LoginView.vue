@@ -51,18 +51,21 @@ export default {
       password: "",
     };
   },
-  created() {
-    // If already logged in to your app
-    const userToken = localStorage.getItem("token");
-    if (userToken) {
-      // Check if we have SF tokens
-      const sfToken = localStorage.getItem("sfAccessToken");
-      const sfInstanceUrl = localStorage.getItem("sfInstanceUrl");
-      if (sfToken && sfInstanceUrl) {
+  async created() {
+    // If already logged in, backend will handle it via cookies
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/me`,
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        // Already authenticated, just go to dashboard
         this.$router.push("/dashboard");
-      } else {
-        this.triggerSalesforceLogin();
       }
+    } catch (err) {
+      // Not logged in, continue to show login form
+      console.log(err);
     }
   },
   methods: {
@@ -75,33 +78,21 @@ export default {
             password: this.password,
           },
           {
+            withCredentials: true,
             headers: {
               "ngrok-skip-browser-warning": "true",
             },
           }
         );
 
-        // Save user's app token
-        localStorage.setItem("token", response.data.token);
-
-        // Also store user email in userEmailSFApp
-        localStorage.setItem("userEmailSFApp", this.email);
-
-        // If SF tokens exist, go to dashboard. Otherwise, start SF OAuth
-        const sfToken = localStorage.getItem("sfAccessToken");
-        const sfInstanceUrl = localStorage.getItem("sfInstanceUrl");
-        if (sfToken && sfInstanceUrl) {
-          this.$router.push("/dashboard");
-        } else {
-          this.triggerSalesforceLogin();
-        }
+        // Once login is successful, trigger Salesforce OAuth
+        this.triggerSalesforceLogin();
       } catch (error) {
         alert(error.response?.data?.message || "Login failed");
         console.error("❌ Login Error:", error);
       }
     },
     triggerSalesforceLogin() {
-      // Replace your SF Connected App info here
       window.location.href =
         `${import.meta.env.VITE_SF_LOGIN_URL}/services/oauth2/authorize` +
         `?response_type=code` +
