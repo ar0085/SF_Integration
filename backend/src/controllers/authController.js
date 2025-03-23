@@ -95,8 +95,18 @@ exports.salesforceCallback = async (req, res) => {
     await conn.authorize(code);
 
     // Save tokens in session for demonstration
-    tokenStore.sfAccessToken = conn.accessToken;
-    tokenStore.sfInstanceUrl = conn.instanceUrl;
+    // tokenStore.sfAccessToken = conn.accessToken;
+    // tokenStore.sfInstanceUrl = conn.instanceUrl;
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // HTTPS in production
+      sameSite: "Lax",
+      maxAge: 1000 * 60 * 60 * 2, // 2 hours
+    };
+
+    res.cookie("sfAccessToken", conn.accessToken, cookieOptions);
+    res.cookie("sfInstanceUrl", conn.instanceUrl, cookieOptions);
 
     console.log("✅ Successfully authenticated with Salesforce!");
     console.log("🔹 Access Token:", conn.accessToken);
@@ -104,9 +114,11 @@ exports.salesforceCallback = async (req, res) => {
     console.log("✅ Salesforce Access Token Stored in Cookie");
 
     // Redirect to your frontend's dashboard
-    return res.redirect(
-      `${process.env.FRONTEND_URL}/dashboard?accessToken=${conn.accessToken}&instanceUrl=${conn.instanceUrl}`
-    );
+    // return res.redirect(
+    //   `${process.env.FRONTEND_URL}/dashboard?accessToken=${conn.accessToken}&instanceUrl=${conn.instanceUrl}`
+    // );
+
+    return res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   } catch (error) {
     console.error("❌ Salesforce OAuth Error:", error);
     return res.status(500).send("Salesforce OAuth token exchange failed.");

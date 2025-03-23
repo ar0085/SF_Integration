@@ -9,18 +9,36 @@ exports.getAccounts = async (req, res) => {
   const limitNum = parseInt(limit, 10);
   const offset = (pageNum - 1) * limitNum;
 
-  if (!tokenStore.sfAccessToken || !tokenStore.sfInstanceUrl) {
+  const sfAccessToken = req.cookies.sfAccessToken;
+  const sfInstanceUrl = req.cookies.sfInstanceUrl;
+
+  // if (!tokenStore.sfAccessToken || !tokenStore.sfInstanceUrl) {
+  //   console.error(
+  //     "❌ Unauthorized: Missing Salesforce access token in memory."
+  //   );
+  //   return res
+  //     .status(401)
+  //     .json({ message: "Unauthorized: Please log in to Salesforce." });
+  // }
+
+  if (!sfAccessToken || !sfInstanceUrl) {
     console.error(
-      "❌ Unauthorized: Missing Salesforce access token in memory."
+      "❌ Unauthorized: Missing Salesforce access token in cookies."
     );
     return res
       .status(401)
       .json({ message: "Unauthorized: Please log in to Salesforce." });
   }
+
   try {
+    // const conn = new jsforce.Connection({
+    //   accessToken: tokenStore.sfAccessToken,
+    //   instanceUrl: tokenStore.sfInstanceUrl,
+    // });
+
     const conn = new jsforce.Connection({
-      accessToken: tokenStore.sfAccessToken,
-      instanceUrl: tokenStore.sfInstanceUrl,
+      accessToken: sfAccessToken,
+      instanceUrl: sfInstanceUrl,
     });
 
     const queryStr = `SELECT Id, Name, Type, Industry FROM Account ORDER BY CreatedDate LIMIT ${limitNum} OFFSET ${offset}`;

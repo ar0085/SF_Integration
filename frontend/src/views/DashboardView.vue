@@ -121,24 +121,24 @@ export default {
   },
   async created() {
     // Possibly read SF tokens from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const newAccessToken = urlParams.get("accessToken");
-    const newInstanceUrl = urlParams.get("instanceUrl");
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const newAccessToken = urlParams.get("accessToken");
+    // const newInstanceUrl = urlParams.get("instanceUrl");
 
-    if (newAccessToken && newInstanceUrl) {
-      localStorage.setItem("sfAccessToken", newAccessToken);
-      localStorage.setItem("sfInstanceUrl", newInstanceUrl);
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
+    // if (newAccessToken && newInstanceUrl) {
+    //   localStorage.setItem("sfAccessToken", newAccessToken);
+    //   localStorage.setItem("sfInstanceUrl", newInstanceUrl);
+    //   window.history.replaceState({}, document.title, window.location.pathname);
+    // }
 
-    const storedToken = localStorage.getItem("sfAccessToken");
-    const storedUrl = localStorage.getItem("sfInstanceUrl");
+    // const storedToken = localStorage.getItem("sfAccessToken");
+    // const storedUrl = localStorage.getItem("sfInstanceUrl");
 
-    if (!storedToken || !storedUrl) {
-      // If missing, go back to /login
-      this.$router.push("/login");
-      return;
-    }
+    // if (!storedToken || !storedUrl) {
+    //   // If missing, go back to /login
+    //   this.$router.push("/login");
+    //   return;
+    // }
 
     await this.fetchAccounts();
   },
