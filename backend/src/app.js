@@ -30,7 +30,8 @@ app.use(
     cookie: {
       secure: false, // 🔹 Set to `false` to allow HTTP frontend with HTTPS backend
       httpOnly: true, // 🔹 Prevent JavaScript from accessing session cookie
-      sameSite: "lax", // 🔹 Required for cross-origin session persistence
+      sameSite: "None",      // 🔥 Required for cross-origin cookies
+      maxAge: 1000 * 60 * 60 * 2 // 2 hours
     },
   })
 );
