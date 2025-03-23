@@ -114,32 +114,12 @@ export default {
       limit: 5,
       isLoading: false,
       // renamed variable: userEmailSFApp
-      userEmailSFApp: localStorage.getItem("userEmailSFApp") || "",
+      userEmailSFApp: sessionStorage.getItem("userEmailSFApp") || "",
       // logout modal
       showLogoutModal: false,
     };
   },
   async created() {
-    // Possibly read SF tokens from URL
-    // const urlParams = new URLSearchParams(window.location.search);
-    // const newAccessToken = urlParams.get("accessToken");
-    // const newInstanceUrl = urlParams.get("instanceUrl");
-
-    // if (newAccessToken && newInstanceUrl) {
-    //   localStorage.setItem("sfAccessToken", newAccessToken);
-    //   localStorage.setItem("sfInstanceUrl", newInstanceUrl);
-    //   window.history.replaceState({}, document.title, window.location.pathname);
-    // }
-
-    // const storedToken = localStorage.getItem("sfAccessToken");
-    // const storedUrl = localStorage.getItem("sfInstanceUrl");
-
-    // if (!storedToken || !storedUrl) {
-    //   // If missing, go back to /login
-    //   this.$router.push("/login");
-    //   return;
-    // }
-
     await this.fetchAccounts();
   },
   methods: {
@@ -186,11 +166,7 @@ export default {
     // Clear data and redirect
     confirmLogout() {
       // Clear all localStorage items
-      localStorage.removeItem("token");
-      localStorage.removeItem("sfAccessToken");
-      localStorage.removeItem("sfInstanceUrl");
-      localStorage.removeItem("userEmailSFApp");
-
+      sessionStorage.removeItem("userEmailSFApp");
       this.$router.push("/login");
     },
   },

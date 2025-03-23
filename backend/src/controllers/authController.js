@@ -3,9 +3,8 @@ const jwt = require("jsonwebtoken");
 const pool = require("../config/db");
 const jsforce = require("jsforce");
 
-const tokenStore = require("../../tokenstore");
-
 const { getOAuth2Instance } = require("../config/salesforce");
+const { encrypt } = require("../utils/crypto");
 
 exports.registerUser = async (req, res) => {
   try {
@@ -94,29 +93,20 @@ exports.salesforceCallback = async (req, res) => {
     const conn = new jsforce.Connection({ oauth2 });
     await conn.authorize(code);
 
-    // Save tokens in session for demonstration
-    // tokenStore.sfAccessToken = conn.accessToken;
-    // tokenStore.sfInstanceUrl = conn.instanceUrl;
-
     const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // HTTPS in production
-      sameSite: "None",      // 🔥 Required for cross-origin cookies
-      maxAge: 1000 * 60 * 60 * 2 // 2 hours
+      sameSite: "None", // 🔥 Required for cross-origin cookies
+      maxAge: 1000 * 60 * 60 * 2, // 2 hours
     };
 
-    res.cookie("sfAccessToken", conn.accessToken, cookieOptions);
-    res.cookie("sfInstanceUrl", conn.instanceUrl, cookieOptions);
+    res.cookie("sfAccessToken", encrypt(conn.accessToken), cookieOptions);
+    res.cookie("sfInstanceUrl", encrypt(conn.instanceUrl), cookieOptions);
 
     console.log("✅ Successfully authenticated with Salesforce!");
     console.log("🔹 Access Token:", conn.accessToken);
     console.log("🔹 Instance URL:", conn.instanceUrl);
     console.log("✅ Salesforce Access Token Stored in Cookie");
-
-    // Redirect to your frontend's dashboard
-    // return res.redirect(
-    //   `${process.env.FRONTEND_URL}/dashboard?accessToken=${conn.accessToken}&instanceUrl=${conn.instanceUrl}`
-    // );
 
     return res.redirect(`${process.env.FRONTEND_URL}/dashboard`);
   } catch (error) {

@@ -85,6 +85,7 @@ export default {
           }
         );
 
+        sessionStorage.setItem("userEmailSFApp", this.email);
         // Once login is successful, trigger Salesforce OAuth
         this.triggerSalesforceLogin();
       } catch (error) {

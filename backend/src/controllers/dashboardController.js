@@ -1,5 +1,6 @@
 const jsforce = require("jsforce");
-const tokenStore = require("../../tokenstore");
+const { decrypt } = require("../utils/crypto");
+
 exports.getAccounts = async (req, res) => {
   console.log("getAccounts", {
     sfAccessToken: req?.session?.sfAccessToken,
@@ -9,17 +10,8 @@ exports.getAccounts = async (req, res) => {
   const limitNum = parseInt(limit, 10);
   const offset = (pageNum - 1) * limitNum;
 
-  const sfAccessToken = req.cookies.sfAccessToken;
-  const sfInstanceUrl = req.cookies.sfInstanceUrl;
-
-  // if (!tokenStore.sfAccessToken || !tokenStore.sfInstanceUrl) {
-  //   console.error(
-  //     "❌ Unauthorized: Missing Salesforce access token in memory."
-  //   );
-  //   return res
-  //     .status(401)
-  //     .json({ message: "Unauthorized: Please log in to Salesforce." });
-  // }
+  const sfAccessToken = decrypt(req.cookies.sfAccessToken);
+  const sfInstanceUrl = decrypt(req.cookies.sfInstanceUrl);
 
   if (!sfAccessToken || !sfInstanceUrl) {
     console.error(
@@ -31,11 +23,6 @@ exports.getAccounts = async (req, res) => {
   }
 
   try {
-    // const conn = new jsforce.Connection({
-    //   accessToken: tokenStore.sfAccessToken,
-    //   instanceUrl: tokenStore.sfInstanceUrl,
-    // });
-
     const conn = new jsforce.Connection({
       accessToken: sfAccessToken,
       instanceUrl: sfInstanceUrl,
