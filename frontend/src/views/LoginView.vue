@@ -53,22 +53,57 @@ export default {
   },
   created() {
     // If already logged in to your app
-    const userToken = localStorage.getItem("token");
-    if (userToken) {
-      // Check if we have SF tokens
-      const sfToken = localStorage.getItem("sfAccessToken");
-      const sfInstanceUrl = localStorage.getItem("sfInstanceUrl");
-      if (sfToken && sfInstanceUrl) {
-        this.$router.push("/dashboard");
-      } else {
-        this.triggerSalesforceLogin();
-      }
-    }
+    // const userToken = localStorage.getItem("token");
+    // if (userToken) {
+    //   // Check if we have SF tokens
+    //   const sfToken = localStorage.getItem("sfAccessToken");
+    //   const sfInstanceUrl = localStorage.getItem("sfInstanceUrl");
+    //   if (sfToken && sfInstanceUrl) {
+    //     this.$router.push("/dashboard");
+    //   } else {
+    //     this.triggerSalesforceLogin();
+    //   }
+    // }
   },
   methods: {
+    // async login() {
+    //   try {
+    //     const response = await axios.post(
+    //       `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+    //       {
+    //         email: this.email,
+    //         password: this.password,
+    //       },
+    //       {
+    //         headers: {
+    //           "ngrok-skip-browser-warning": "true",
+    //         },
+    //       }
+    //     );
+
+    //     // Save user's app token
+    //     localStorage.setItem("token", response.data.token);
+
+    //     // Also store user email in userEmailSFApp
+    //     localStorage.setItem("userEmailSFApp", this.email);
+
+    //     // If SF tokens exist, go to dashboard. Otherwise, start SF OAuth
+    //     const sfToken = localStorage.getItem("sfAccessToken");
+    //     const sfInstanceUrl = localStorage.getItem("sfInstanceUrl");
+    //     if (sfToken && sfInstanceUrl) {
+    //       this.$router.push("/dashboard");
+    //     } else {
+    //       this.triggerSalesforceLogin();
+    //     }
+    //   } catch (error) {
+    //     alert(error.response?.data?.message || "Login failed");
+    //     console.error("❌ Login Error:", error);
+    //   }
+    // },
+    // 🔁 Updated login method
     async login() {
       try {
-        const response = await axios.post(
+        await axios.post(
           `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
           {
             email: this.email,
@@ -78,23 +113,14 @@ export default {
             headers: {
               "ngrok-skip-browser-warning": "true",
             },
+            withCredentials: true, // 🔥 receives the cookie
           }
         );
 
-        // Save user's app token
-        localStorage.setItem("token", response.data.token);
+        // Optional: Save for greeting only
+        sessionStorage.setItem("userEmailSFApp", this.email);
 
-        // Also store user email in userEmailSFApp
-        localStorage.setItem("userEmailSFApp", this.email);
-
-        // If SF tokens exist, go to dashboard. Otherwise, start SF OAuth
-        const sfToken = localStorage.getItem("sfAccessToken");
-        const sfInstanceUrl = localStorage.getItem("sfInstanceUrl");
-        if (sfToken && sfInstanceUrl) {
-          this.$router.push("/dashboard");
-        } else {
-          this.triggerSalesforceLogin();
-        }
+        this.triggerSalesforceLogin(); // Redirect to SF
       } catch (error) {
         alert(error.response?.data?.message || "Login failed");
         console.error("❌ Login Error:", error);
