@@ -5,6 +5,7 @@ const {
   loginUser,
   salesforceLogin,
   salesforceCallback,
+  getCurrentUser,
 } = require("../controllers/authController");
 
 router.post("/register", registerUser);
