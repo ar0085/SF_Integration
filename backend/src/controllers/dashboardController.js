@@ -12,8 +12,11 @@ exports.getAccounts = async (req, res) => {
 
   console.log("🔎 Incoming cookies:", req.cookies);
 
-  const sfAccessToken = decrypt(req.cookies.sfAccessToken);
-  const sfInstanceUrl = decrypt(req.cookies.sfInstanceUrl);
+  // const sfAccessToken = decrypt(req.cookies.sfAccessToken);
+  // const sfInstanceUrl = decrypt(req.cookies.sfInstanceUrl);
+
+  const sfAccessToken = req.cookies.sfAccessToken;
+  const sfInstanceUrl = req.cookies.sfInstanceUrl;
 
   if (!sfAccessToken || !sfInstanceUrl) {
     console.error(

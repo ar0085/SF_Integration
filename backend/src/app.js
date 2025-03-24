@@ -9,12 +9,6 @@ const accountRoutes = require("./routes/accountRoutes");
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("ngrok-skip-browser-warning", "true");
-  next();
-});
-
 app.use(bodyParser.json());
 
 const cookieParser = require("cookie-parser");
@@ -45,10 +39,10 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api", accountRoutes);
 
-// app.use((req, res, next) => {
-//   res.setHeader("ngrok-skip-browser-warning", "true");
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader("ngrok-skip-browser-warning", "true");
+  next();
+});
 
 // FE related
 // // 1. Serve static files from "public" directory

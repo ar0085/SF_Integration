@@ -100,8 +100,10 @@ exports.salesforceCallback = async (req, res) => {
       maxAge: 1000 * 60 * 60 * 2, // 2 hours
     };
 
-    res.cookie("sfAccessToken", encrypt(conn.accessToken), cookieOptions);
-    res.cookie("sfInstanceUrl", encrypt(conn.instanceUrl), cookieOptions);
+    res.cookie("sfAccessToken", conn.accessToken, cookieOptions);
+    res.cookie("sfInstanceUrl", conn.instanceUrl, cookieOptions);
+    // res.cookie("sfAccessToken", encrypt(conn.accessToken), cookieOptions);
+    // res.cookie("sfInstanceUrl", encrypt(conn.instanceUrl), cookieOptions);
 
     console.log("✅ Successfully authenticated with Salesforce!");
     console.log("🔹 Access Token:", conn.accessToken);
