@@ -30,8 +30,8 @@ app.use(
     cookie: {
       secure: false, // 🔹 Set to `false` to allow HTTP frontend with HTTPS backend
       httpOnly: true, // 🔹 Prevent JavaScript from accessing session cookie
-      sameSite: "None",      // 🔥 Required for cross-origin cookies
-      maxAge: 1000 * 60 * 60 * 2 // 2 hours
+      sameSite: "None", // 🔥 Required for cross-origin cookies
+      maxAge: 1000 * 60 * 60 * 2, // 2 hours
     },
   })
 );
@@ -45,12 +45,12 @@ app.use((req, res, next) => {
 });
 
 // FE related
-// 1. Serve static files from "public" directory
-app.use(express.static(path.join(__dirname, "..", "public")));
+// // 1. Serve static files from "public" directory
+// app.use(express.static(path.join(__dirname, "..", "public")));
 
-// 2. (Optional) Fallback route for SPA
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
-});
+// // 2. (Optional) Fallback route for SPA
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+// });
 
 module.exports = app;
