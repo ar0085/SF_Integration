@@ -172,3 +172,91 @@ export default {
   },
 };
 </script>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "DashboardView",
+  data() {
+    return {
+      accounts: [],
+      page: 1,
+      limit: 5,
+      isLoading: false,
+      showLogoutModal: false,
+      userEmailSFApp: sessionStorage.getItem("userEmailSFApp") || "",
+    };
+  },
+  async created() {
+    try {
+      this.isLoading = true;
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/me`,
+        { withCredentials: true }
+      );
+
+      if (res.status === 200) {
+        this.userEmailSFApp = res.data.email;
+        await this.fetchAccounts();
+      }
+    } catch (err) {
+      this.$router.push("/login");
+    } finally {
+      this.isLoading = false;
+    }
+  },
+  methods: {
+    async fetchAccounts() {
+      try {
+        this.isLoading = true;
+        const res = await axios.get(
+          `${import.meta.env.VITE_BACKEND_URL}/api/accounts?page=${
+            this.page
+          }&limit=${this.limit}`,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+            withCredentials: true,
+          }
+        );
+        this.accounts = res.data.records;
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          this.$router.push("/login");
+        } else {
+          alert("Error fetching accounts");
+          console.log("Error fetching accounts ", error);
+        }
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async nextPage() {
+      this.page++;
+      await this.fetchAccounts();
+    },
+    async prevPage() {
+      if (this.page > 1) {
+        this.page--;
+        await this.fetchAccounts();
+      }
+    },
+    cancelLogout() {
+      this.showLogoutModal = false;
+    },
+    async confirmLogout() {
+      try {
+        await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
+          withCredentials: true,
+        });
+      } catch (e) {
+        console.error("Logout failed", e);
+      }
+
+      this.$router.push("/login");
+    },
+  },
+};
+</script>

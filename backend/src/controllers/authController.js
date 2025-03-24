@@ -116,3 +116,18 @@ exports.salesforceCallback = async (req, res) => {
     return res.status(500).send("Salesforce OAuth token exchange failed.");
   }
 };
+
+exports.getCurrentUser = (req, res) => {
+  const userToken = req.cookies.token;
+
+  if (!userToken) {
+    return res.status(401).json({ message: "Not authenticated" });
+  }
+
+  try {
+    const decoded = jwt.verify(userToken, process.env.JWT_SECRET);
+    res.json({ email: decoded.email });
+  } catch {
+    res.status(401).json({ message: "Invalid token" });
+  }
+};

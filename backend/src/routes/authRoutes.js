@@ -14,4 +14,6 @@ router.post("/login", loginUser);
 router.get("/salesforce", salesforceLogin);
 router.get("/salesforce/callback", salesforceCallback);
 
+router.get("/me", getCurrentUser);
+
 module.exports = router;
