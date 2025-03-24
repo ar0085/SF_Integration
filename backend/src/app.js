@@ -28,7 +28,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: process.env.NODE_ENV === "production", // 🔹 Set to `false` to allow HTTP frontend with HTTPS backend
+      secure: false, // 🔹 Set to `false` to allow HTTP frontend with HTTPS backend
       httpOnly: true, // 🔹 Prevent JavaScript from accessing session cookie
       sameSite: "None", // 🔥 Required for cross-origin cookies
       maxAge: 1000 * 60 * 60 * 2, // 2 hours
