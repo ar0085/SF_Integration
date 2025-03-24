@@ -10,6 +10,8 @@ exports.getAccounts = async (req, res) => {
   const limitNum = parseInt(limit, 10);
   const offset = (pageNum - 1) * limitNum;
 
+  console.log("🔎 Incoming cookies:", req.cookies);
+
   const sfAccessToken = decrypt(req.cookies.sfAccessToken);
   const sfInstanceUrl = decrypt(req.cookies.sfInstanceUrl);
 
